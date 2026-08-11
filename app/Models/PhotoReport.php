@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class PhotoReport extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'photo_id',
+        'user_id',
+        'reason',
+        'status',
+        'notes',
+    ];
+
+    public function photo(): BelongsTo
+    {
+        return $this->belongsTo(Photo::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+}
