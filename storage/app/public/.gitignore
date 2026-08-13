@@ -1,2 +1,5 @@
 *
 !.gitignore
+!cameras/
+!cameras/*.cube
+
