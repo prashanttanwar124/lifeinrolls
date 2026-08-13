@@ -66,6 +66,11 @@ const deleteRoll = (rollId: number) => {
                             <span class="text-xs font-semibold">{{ slotProps.data.current_photos }} / {{ slotProps.data.max_photos }}</span>
                         </template>
                     </Column>
+                    <Column field="photos_count" header="Photos">
+                        <template #body="slotProps">
+                            <span class="text-xs font-semibold">{{ slotProps.data.photos_count ?? 0 }}</span>
+                        </template>
+                    </Column>
                     <Column field="roll_type" header="Type">
                         <template #body="slotProps">
                             <Tag :value="slotProps.data.roll_type" severity="secondary" class="capitalize" />
@@ -78,6 +83,15 @@ const deleteRoll = (rollId: number) => {
                     </Column>
                     <Column header="Actions">
                         <template #body="slotProps">
+                            <Button
+                                icon="pi pi-images"
+                                severity="secondary"
+                                text
+                                rounded
+                                size="small"
+                                title="View photos"
+                                @click="router.get(`/admin/rolls/${slotProps.data.id}`)"
+                            />
                             <Button
                                 icon="pi pi-trash"
                                 severity="danger"
