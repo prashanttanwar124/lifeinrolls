@@ -43,10 +43,18 @@ class CameraPresetController extends Controller
         ]);
 
         $lutPath = $validated['lut'] ?? "cameras/{$validated['preset_key']}.cube";
+        $checksum = null;
 
         if ($request->hasFile('lut_file')) {
-            $stored = $request->file('lut_file')->storeAs('cameras', "{$validated['preset_key']}.cube", 'public');
+            $file = $request->file('lut_file');
+            $checksum = hash_file('sha256', $file->getRealPath());
+            $stored = $file->storeAs('cameras', "{$validated['preset_key']}.cube", 'public');
             $lutPath = $stored;
+        } elseif (! empty($lutPath)) {
+            $filePath = storage_path('app/public/'.ltrim($lutPath, '/'));
+            if (file_exists($filePath)) {
+                $checksum = hash_file('sha256', $filePath);
+            }
         }
 
         CameraPreset::create([
@@ -55,6 +63,7 @@ class CameraPresetController extends Controller
             'version' => $validated['version'],
             'engine' => $validated['engine'],
             'lut' => $lutPath,
+            'lut_checksum' => $checksum,
             'grain' => $validated['grain'],
             'bloom' => $validated['bloom'],
             'vignette' => $validated['vignette'],
