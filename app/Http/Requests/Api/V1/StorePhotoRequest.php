@@ -14,9 +14,9 @@ class StorePhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => 'required|image|max:10240',
+            'photo' => 'required|file|image|max:20480',
             'caption' => 'nullable|string|max:255',
-            'camera_preset_id' => 'nullable|exists:camera_presets,id',
+            'camera_preset_id' => 'nullable|integer|exists:camera_presets,id',
         ];
     }
 }

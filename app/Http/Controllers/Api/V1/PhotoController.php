@@ -54,32 +54,41 @@ class PhotoController extends Controller
             return $this->error('Film roll is full! No more exposures available.', 422);
         }
 
-        $disk = config('filesystems.default', 's3');
-        $path = $request->file('photo')->store("rolls/{$roll->id}", $disk);
-        $photoUrl = Storage::disk($disk)->url($path);
+        try {
+            $disk = config('filesystems.default', 's3');
+            $path = $request->file('photo')->store("rolls/{$roll->id}", $disk);
+            $photoUrl = Storage::disk($disk)->url($path);
 
-        $photo = Photo::create([
-            'film_roll_id' => $roll->id,
-            'user_id' => $request->user()->id,
-            'camera_preset_id' => $request->camera_preset_id ?? $roll->camera_preset_id,
-            'photo_url' => $photoUrl,
-            'thumbnail_url' => $photoUrl,
-            'caption' => $request->caption,
-            'status' => $roll->roll_type === 'approval' ? 'pending_approval' : 'approved',
-            'upload_status' => 'ready',
-        ]);
+            $photo = Photo::create([
+                'film_roll_id' => $roll->id,
+                'user_id' => $request->user()->id,
+                'camera_preset_id' => $request->camera_preset_id ?? $roll->camera_preset_id,
+                'photo_url' => $photoUrl,
+                'thumbnail_url' => $photoUrl,
+                'caption' => $request->caption,
+                'status' => $roll->roll_type === 'approval' ? 'pending_approval' : 'approved',
+                'upload_status' => 'ready',
+            ]);
 
-        $roll->increment('current_photos');
+            $roll->increment('current_photos');
 
-        if ($roll->refresh()->current_photos >= $roll->max_photos) {
-            $roll->update(['status' => 'completed']);
+            if ($roll->refresh()->current_photos >= $roll->max_photos) {
+                $roll->update(['status' => 'completed']);
+            }
+
+            return $this->success(
+                new PhotoResource($photo->load(['user', 'cameraPreset'])),
+                'Photo uploaded successfully',
+                201
+            );
+        } catch (\Throwable $e) {
+            \Log::error('API Photo upload exception: ' . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return $this->error('Failed to upload photo: ' . $e->getMessage(), 500);
         }
-
-        return $this->success(
-            new PhotoResource($photo->load(['user', 'cameraPreset'])),
-            'Photo uploaded successfully',
-            201
-        );
     }
 
     /**
