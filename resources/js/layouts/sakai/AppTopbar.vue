@@ -44,8 +44,10 @@ const toggleUserMenu = (event: Event) => {
             />
 
             <Link href="/dashboard" class="layout-topbar-logo">
-                <i class="pi pi-camera text-2xl text-emerald-500"></i>
-                <span class="font-bold tracking-tight">LifeInRolls</span>
+                <img src="/images/logo.png" alt="Life in Rolls" class="w-8 h-8 rounded-lg shadow-sm object-cover" />
+                <span class="font-bold tracking-tight text-lg bg-gradient-to-r from-[#FFB649] via-[#FF7253] to-[#EB2A74] bg-clip-text text-transparent">
+                    Life in Rolls
+                </span>
             </Link>
         </div>
 

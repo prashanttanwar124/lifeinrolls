@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Account Deletion & Data Removal — Life in Rolls</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,14 +13,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0A0A0C; color: #E0E0E6; line-height: 1.7; padding: 40px 20px; }
         .container { max-width: 800px; margin: 0 auto; background: #141416; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .badge { display: inline-block; padding: 6px 12px; background: rgba(228, 179, 99, 0.12); color: #E4B363; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
+        .badge { display: inline-block; padding: 6px 12px; background: rgba(255, 114, 83, 0.12); color: #FF7253; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
         h1 { font-size: 32px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; letter-spacing: -0.5px; }
         .date { font-size: 14px; color: rgba(255,255,255,0.45); margin-bottom: 32px; }
         h2 { font-size: 20px; font-weight: 700; color: #FFFFFF; margin-top: 32px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
         p { margin-bottom: 16px; color: rgba(255,255,255,0.75); font-size: 15px; }
         ul { margin-left: 24px; margin-bottom: 16px; color: rgba(255,255,255,0.75); font-size: 15px; }
         li { margin-bottom: 8px; }
-        a { color: #E4B363; text-decoration: none; font-weight: 600; }
+        a { color: #FF7253; text-decoration: none; font-weight: 600; }
         a:hover { text-decoration: underline; }
         
         .highlight-box { background: rgba(255, 77, 77, 0.08); border: 1px solid rgba(255, 77, 77, 0.2); border-radius: 16px; padding: 20px; margin: 24px 0; }
@@ -26,16 +28,16 @@
         .highlight-box p { margin-bottom: 0; color: rgba(255,255,255,0.85); font-size: 14px; }
 
         .step-card { background: #1B1B1E; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
-        .step-number { font-size: 13px; font-weight: 800; color: #E4B363; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .step-number { font-size: 13px; font-weight: 800; color: #FF7253; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
         .step-title { font-size: 16px; font-weight: 700; color: #FFF; margin-bottom: 6px; }
 
-        .form-card { background: #18181C; border: 1px solid rgba(228, 179, 99, 0.2); border-radius: 18px; padding: 28px; margin-top: 32px; }
+        .form-card { background: #18181C; border: 1px solid rgba(255, 114, 83, 0.25); border-radius: 18px; padding: 28px; margin-top: 32px; }
         .form-group { margin-bottom: 16px; }
         .form-label { display: block; font-size: 14px; font-weight: 600; color: #FFFFFF; margin-bottom: 8px; }
         .form-input { width: 100%; padding: 12px 16px; background: #101012; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #FFF; font-size: 15px; font-family: inherit; }
-        .form-input:focus { outline: none; border-color: #E4B363; }
-        .form-button { background: #E4B363; color: #0A0A0C; border: none; border-radius: 10px; padding: 13px 24px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.2s; width: 100%; }
-        .form-button:hover { background: #F0C478; }
+        .form-input:focus { outline: none; border-color: #FF7253; }
+        .form-button { background: linear-gradient(135deg, #FFB649 0%, #FF7253 50%, #EB2A74 100%); color: #FFFFFF; border: none; border-radius: 10px; padding: 13px 24px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; width: 100%; }
+        .form-button:hover { opacity: 0.92; }
 
         .alert-success { background: rgba(52, 199, 89, 0.15); border: 1px solid rgba(52, 199, 89, 0.3); color: #34C759; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; font-weight: 600; font-size: 14px; }
 

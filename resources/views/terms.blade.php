@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Terms of Service — Life in Rolls</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,14 +13,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0A0A0C; color: #E0E0E6; line-height: 1.7; padding: 40px 20px; }
         .container { max-width: 800px; margin: 0 auto; background: #141416; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        .badge { display: inline-block; padding: 6px 12px; background: rgba(228, 179, 99, 0.12); color: #E4B363; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
+        .badge { display: inline-block; padding: 6px 12px; background: rgba(255, 114, 83, 0.12); color: #FF7253; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
         h1 { font-size: 32px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; letter-spacing: -0.5px; }
         .date { font-size: 14px; color: rgba(255,255,255,0.45); margin-bottom: 32px; }
         h2 { font-size: 20px; font-weight: 700; color: #FFFFFF; margin-top: 32px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
         p { margin-bottom: 16px; color: rgba(255,255,255,0.75); font-size: 15px; }
         ul { margin-left: 24px; margin-bottom: 16px; color: rgba(255,255,255,0.75); font-size: 15px; }
         li { margin-bottom: 8px; }
-        a { color: #E4B363; text-decoration: none; font-weight: 600; }
+        a { color: #FF7253; text-decoration: none; font-weight: 600; }
         a:hover { text-decoration: underline; }
         .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); text-align: center; font-size: 13px; color: rgba(255,255,255,0.4); }
     </style>
