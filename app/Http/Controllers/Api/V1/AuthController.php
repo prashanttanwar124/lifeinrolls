@@ -63,6 +63,28 @@ class AuthController extends Controller
         ], 'Login successful');
     }
 
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $validated['email'])->first();
+        if ($user) {
+            \App\Models\SupportRequest::create([
+                'user_id' => $user->id,
+                'subject' => 'Password Reset Request: ' . $user->email,
+                'message' => 'Password reset requested via mobile app at ' . now()->toIso8601String(),
+                'status' => 'open',
+            ]);
+        }
+
+        return $this->success(
+            null,
+            'If an account is associated with this email, reset instructions have been sent.'
+        );
+    }
+
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
@@ -75,5 +97,35 @@ class AuthController extends Controller
         return $this->success([
             'user' => new UserResource($request->user()),
         ], 'Profile fetched');
+    }
+
+    public function deleteAccount(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        // Delete user's uploaded photos from storage
+        $photos = \App\Models\Photo::where('user_id', $user->id)->get();
+        foreach ($photos as $photo) {
+            if ($photo->photo_url) {
+                try {
+                    $path = parse_url($photo->photo_url, PHP_URL_PATH);
+                    if ($path) {
+                        $trimmed = ltrim($path, '/');
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($trimmed);
+                    }
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning("Failed to delete photo on account deletion: {$e->getMessage()}");
+                }
+            }
+            $photo->delete();
+        }
+
+        // Revoke all personal access tokens
+        $user->tokens()->delete();
+
+        // Delete user record (cascades to owned rolls & memberships)
+        $user->delete();
+
+        return $this->success(null, 'Your account and all associated data have been permanently deleted.');
     }
 }

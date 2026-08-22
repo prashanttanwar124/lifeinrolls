@@ -69,4 +69,28 @@ Route::get('/join/{token}', function (string $token) {
     ]);
 })->name('rolls.invite-link');
 
+// Public Legal & Compliance Pages (Google Play / App Store Required)
+Route::view('/privacy', 'privacy')->name('privacy');
+Route::view('/terms', 'terms')->name('terms');
+Route::view('/account-deletion', 'account-deletion')->name('account-deletion');
+Route::redirect('/delete-account', '/account-deletion');
+
+// Public Web Account Deletion Request Handler
+Route::post('/account-deletion/request', function (Illuminate\Http\Request $request) {
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'reason' => 'nullable|string|max:500',
+    ]);
+
+    // Create a support ticket / deletion record for admin review or automated processing
+    \App\Models\SupportRequest::create([
+        'user_id' => \App\Models\User::where('email', $validated['email'])->value('id'),
+        'subject' => 'Account Deletion Request: ' . $validated['email'],
+        'message' => 'User requested account deletion via public web form. Email: ' . $validated['email'] . '. Reason: ' . ($validated['reason'] ?? 'Not provided'),
+        'status' => 'open',
+    ]);
+
+    return back()->with('success', 'Your account deletion request for ' . $validated['email'] . ' has been received. Our team will verify and permanently delete your data within 24-48 hours.');
+});
+
 require __DIR__.'/settings.php';
