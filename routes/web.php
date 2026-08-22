@@ -27,8 +27,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Film Rolls
         Route::get('/rolls', [RollController::class, 'index'])->name('rolls.index');
         Route::get('/rolls/{roll}', [RollController::class, 'show'])->name('rolls.show');
+        Route::post('/rolls/{roll}/photos', [RollController::class, 'storePhoto'])->name('rolls.photos.store');
         Route::delete('/rolls/{roll}', [RollController::class, 'destroy'])->name('rolls.destroy');
         Route::delete('/rolls/{roll}/photos/{photo}', [RollController::class, 'destroyPhoto'])->name('rolls.photos.destroy');
+
+        // Storage Diagnostic
+        Route::post('/storage-test', [DashboardController::class, 'testStorage'])->name('storage.test');
 
         // Camera Presets
         Route::get('/presets', [CameraPresetController::class, 'index'])->name('presets.index');

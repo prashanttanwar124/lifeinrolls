@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Tag from 'primevue/tag';
+import { ref } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     stats: {
         total_users: number;
         total_rolls: number;
@@ -18,19 +19,91 @@ defineProps<{
     };
     recentRolls: any[];
     recentUsers: any[];
+    storageInfo?: {
+        disk: string;
+        bucket?: string;
+        endpoint?: string;
+        url?: string;
+        has_key: boolean;
+        has_secret: boolean;
+    };
 }>();
+
+const testingStorage = ref(false);
+
+const runStorageTest = () => {
+    testingStorage.value = true;
+    router.post('/admin/storage-test', {}, {
+        preserveScroll: true,
+        onFinish: () => {
+            testingStorage.value = false;
+        },
+    });
+};
 </script>
 
 <template>
     <Head title="Admin Dashboard" />
 
     <div class="flex flex-col gap-6">
+        <!-- Error Banner if Storage test failed -->
+        <div v-if="$page.props.errors?.storage_error" class="p-4 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300">
+            <div class="flex items-start gap-3">
+                <i class="pi pi-times-circle text-xl mt-0.5 text-red-500"></i>
+                <div class="space-y-1 text-sm font-medium">
+                    <p class="font-bold text-red-800 dark:text-red-200">Cloudflare R2 / Storage Test Failed:</p>
+                    <p class="font-mono text-xs break-all">{{ $page.props.errors.storage_error }}</p>
+                </div>
+            </div>
+        </div>
+
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">Admin Overview</h1>
-                <p class="text-sm text-slate-500">Manage mobile app users, rolls, presets, and content.</p>
+                <p class="text-sm text-slate-500">Manage mobile app users, rolls, presets, and storage.</p>
             </div>
-            <Tag value="System Admin" severity="info" icon="pi pi-shield" />
+            <div class="flex items-center gap-2">
+                <Button
+                    label="Test R2 Storage Connection"
+                    icon="pi pi-cloud"
+                    severity="secondary"
+                    outlined
+                    size="small"
+                    :loading="testingStorage"
+                    @click="runStorageTest"
+                />
+                <Tag value="System Admin" severity="info" icon="pi pi-shield" />
+            </div>
+        </div>
+
+        <!-- Storage Status Banner -->
+        <div v-if="storageInfo" class="p-4 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center text-orange-600">
+                    <i class="pi pi-cloud-upload text-base"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold">Storage Driver:</span>
+                        <Tag :value="storageInfo.disk" :severity="storageInfo.disk === 's3' ? 'success' : 'warn'" class="uppercase text-xs" />
+                        <span v-if="storageInfo.bucket" class="text-xs text-slate-500 font-mono">Bucket: {{ storageInfo.bucket }}</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        Key: {{ storageInfo.has_key ? '✓ Configured' : '✗ Missing' }} ·
+                        Secret: {{ storageInfo.has_secret ? '✓ Configured' : '✗ Missing' }} ·
+                        Public URL: {{ storageInfo.url || 'Not set' }}
+                    </p>
+                </div>
+            </div>
+
+            <Button
+                label="Run Live Upload & Read Test"
+                icon="pi pi-play"
+                size="small"
+                severity="primary"
+                :loading="testingStorage"
+                @click="runStorageTest"
+            />
         </div>
 
         <!-- Metric Stat Cards -->
