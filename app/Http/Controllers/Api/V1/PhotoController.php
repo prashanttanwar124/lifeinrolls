@@ -54,8 +54,9 @@ class PhotoController extends Controller
             return $this->error('Film roll is full! No more exposures available.', 422);
         }
 
-        $path = $request->file('photo')->store('photos', 'public');
-        $photoUrl = Storage::url($path);
+        $disk = config('filesystems.default', 's3');
+        $path = $request->file('photo')->store("rolls/{$roll->id}", $disk);
+        $photoUrl = Storage::disk($disk)->url($path);
 
         $photo = Photo::create([
             'film_roll_id' => $roll->id,
@@ -101,9 +102,18 @@ class PhotoController extends Controller
     {
         Gate::authorize('delete', $photo);
 
+        $disk = config('filesystems.default', 's3');
         $storagePrefix = '/storage/';
         if (str_starts_with($photo->photo_url, $storagePrefix)) {
             Storage::disk('public')->delete(substr($photo->photo_url, strlen($storagePrefix)));
+        } else {
+            $baseUrl = rtrim((string) Storage::disk($disk)->url(''), '/');
+            if (! empty($baseUrl) && str_starts_with($photo->photo_url, $baseUrl)) {
+                $relativePath = ltrim(substr($photo->photo_url, strlen($baseUrl)), '/');
+                if (! empty($relativePath)) {
+                    Storage::disk($disk)->delete($relativePath);
+                }
+            }
         }
 
         $roll = $photo->filmRoll;
